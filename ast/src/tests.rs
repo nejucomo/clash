@@ -1,4 +1,4 @@
-use test_case_dir_macros::test_case_dir;
+use test_case_dir::test_case_dir;
 
 use crate::Expr;
 use crate::errors::ParseError;

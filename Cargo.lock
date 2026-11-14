@@ -147,7 +147,7 @@ name = "clash-ast"
 version = "0.1.0"
 dependencies = [
  "derive_more",
- "test-case-dir-macros",
+ "test-case-dir",
  "thiserror",
 ]
 
@@ -409,13 +409,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "test-case-dir"
+version = "0.1.0"
+dependencies = [
+ "test-case",
+ "test-case-dir-macros",
+]
+
+[[package]]
 name = "test-case-dir-macros"
 version = "0.1.0"
 dependencies = [
  "proc-macro2",
  "quote",
  "syn 3.0.10",
- "test-case",
 ]
 
 [[package]]

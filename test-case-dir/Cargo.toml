@@ -1,0 +1,11 @@
+[package]
+name = "test-case-dir"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+test-case-dir-macros.workspace = true
+test-case = "3.4.1"
+
+[lints]
+workspace = true
