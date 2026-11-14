@@ -1,9 +1,18 @@
 [package]
-name = "testcase-dir"
+name = "test-case-dir"
 edition.workspace = true
 version.workspace = true
 
+[lib]
+proc-macro = true
+
 [dependencies]
+proc-macro2 = "1.0.107"
+quote = "1.0.47"
+syn = { version = "3.0.10", features = ["full"] }
+
+[dev-dependencies]
+test-case = "3.4.1"
 
 [lints]
 workspace = true
