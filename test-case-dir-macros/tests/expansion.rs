@@ -1,6 +1,6 @@
 //! Integration tests of the `test_case_dir` macro against the vectors in `tests/vectors/`
 
-use test_case_dir::test_case_dir;
+use test_case_dir_macros::test_case_dir;
 
 #[test_case_dir("vectors/concat")]
 fn concat(a: &[u8], b: &[u8], expected: &[u8]) {

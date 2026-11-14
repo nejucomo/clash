@@ -1,5 +1,5 @@
 [package]
-name = "test-case-dir"
+name = "test-case-dir-macros"
 edition.workspace = true
 version.workspace = true
 

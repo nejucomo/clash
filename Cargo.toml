@@ -3,7 +3,7 @@ resolver = "3"
 members = [
   "ast",
   "clash",
-  "test-case-dir",
+  "test-case-dir-macros",
 ]
 
 [workspace.package]
@@ -18,7 +18,7 @@ missing_docs = "deny"
 unsafe_code = "deny"
 
 [workspace.dependencies]
-test-case-dir.path = "test-case-dir"
+test-case-dir-macros.path = "test-case-dir-macros"
 
 clap = "4.6.7"
 derive_more = "2.1.1"
