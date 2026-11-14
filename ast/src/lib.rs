@@ -2,8 +2,6 @@
 
 use derive_more::Display;
 
-mod parser;
-
 #[cfg(test)]
 mod tests;
 

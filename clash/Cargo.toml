@@ -9,3 +9,4 @@ workspace = true
 [dependencies]
 yaffa.workspace = true
 clap = { workspace = true, features = ["derive"] }
+chumsky.workspace = true

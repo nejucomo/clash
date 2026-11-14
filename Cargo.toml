@@ -2,7 +2,7 @@
 resolver = "3"
 members = [
   "ast",
-  "clash",
+  "clash", "parser",
   "test-case-dir",
   "test-case-dir-macros",
 ]
@@ -19,9 +19,12 @@ missing_docs = "deny"
 unsafe_code = "deny"
 
 [workspace.dependencies]
+clash-ast.path = "ast"
+clash-parser.path = "parser"
 test-case-dir.path = "test-case-dir"
 test-case-dir-macros.path = "test-case-dir-macros"
 
+chumsky = "0.13.0"
 clap = "4.6.7"
 derive_more = "2.1.1"
 thiserror = "2.0.21"

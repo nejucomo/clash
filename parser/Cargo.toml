@@ -1,0 +1,13 @@
+[package]
+name = "clash-parser"
+edition.workspace = true
+version.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+chumsky = { workspace = true, features = ["lexical-numbers"] }
+clash-ast.workspace = true
+derive_more = { workspace = true, features = ["from"] }
+thiserror.workspace = true
