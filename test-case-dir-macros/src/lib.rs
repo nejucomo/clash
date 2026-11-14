@@ -8,7 +8,7 @@ use proc_macro::TokenStream;
 use proc_macro2::Span;
 use quote::quote;
 use syn::ext::IdentExt;
-use syn::{Error, FnArg, Ident, ItemFn, LitStr, Pat, Result, parse_macro_input};
+use syn::{Error, FnArg, Ident, ItemFn, LitStr, Pat, Result, Type, parse_macro_input};
 
 /// Generate a `test-case` test for each Test Case Directory in the given Test Vector Directory
 ///
@@ -23,7 +23,8 @@ pub fn test_case_dir(attr: TokenStream, item: TokenStream) -> TokenStream {
 }
 
 fn expand(dir: &LitStr, item: ItemFn) -> Result<proc_macro2::TokenStream> {
-    let params = param_names(&item)?;
+    let params = params(&item)?;
+    let names: Vec<Ident> = params.iter().map(|p| p.name.clone()).collect();
     let vector_dir = resolve_vector_dir(dir);
     let cases = read_case_dirs(dir, &vector_dir)?;
 
@@ -32,14 +33,18 @@ fn expand(dir: &LitStr, item: ItemFn) -> Result<proc_macro2::TokenStream> {
         .iter()
         .enumerate()
         .map(|(i, (name, path))| {
-            let files = read_vector_files(dir, path, &params)?;
+            let files = read_vector_files(dir, path, &names)?;
+            let includes = params.iter().zip(&files).map(|(param, file)| {
+                let include = param.kind.include_macro();
+                quote! { #include!(#file) }
+            });
             let test_case = if i == 0 {
                 quote! { ::test_case_dir::__private::test_case::test_case }
             } else {
                 quote! { test_case }
             };
             Ok(quote! {
-                #[#test_case( #( include_bytes!(#files) ),* ; #name )]
+                #[#test_case( #( #includes ),* ; #name )]
             })
         })
         .collect::<Result<Vec<_>>>()?;
@@ -50,8 +55,66 @@ fn expand(dir: &LitStr, item: ItemFn) -> Result<proc_macro2::TokenStream> {
     })
 }
 
-/// The parameter names of the test function, which must all be plain identifiers
-fn param_names(item: &ItemFn) -> Result<Vec<Ident>> {
+/// A test function parameter, which receives the contents of the Test Vector File of the same name
+struct Param {
+    name: Ident,
+    kind: VectorKind,
+}
+
+/// How a Test Vector File is passed to its parameter, determined by the parameter type
+enum VectorKind {
+    /// `&[u8]`, via [`include_bytes!`]
+    Bytes,
+    /// `&str`, via [`include_str!`]
+    Str,
+}
+
+impl VectorKind {
+    /// Classify a parameter type, which must be `&[u8]` or `&str` (with any lifetime)
+    fn of(ty: &Type) -> Result<Self> {
+        let err = || {
+            Error::new_spanned(
+                ty,
+                "test_case_dir parameters must have type `&[u8]` or `&str`",
+            )
+        };
+        let Type::Reference(r) = strip_groups(ty) else {
+            return Err(err());
+        };
+        if r.mutability.is_some() {
+            return Err(err());
+        }
+        match strip_groups(&r.elem) {
+            Type::Slice(s) if is_ident_type(&s.elem, "u8") => Ok(VectorKind::Bytes),
+            elem if is_ident_type(elem, "str") => Ok(VectorKind::Str),
+            _ => Err(err()),
+        }
+    }
+
+    /// The macro which includes a Test Vector File as this kind
+    fn include_macro(&self) -> proc_macro2::TokenStream {
+        match self {
+            VectorKind::Bytes => quote! { include_bytes },
+            VectorKind::Str => quote! { include_str },
+        }
+    }
+}
+
+/// Look through invisible groups, which wrap types substituted by `macro_rules!`
+fn strip_groups(ty: &Type) -> &Type {
+    match ty {
+        Type::Group(g) => strip_groups(&g.elem),
+        ty => ty,
+    }
+}
+
+/// Whether `ty` is the single-identifier type path `name`
+fn is_ident_type(ty: &Type, name: &str) -> bool {
+    matches!(strip_groups(ty), Type::Path(p) if p.qself.is_none() && p.path.is_ident(name))
+}
+
+/// The parameters of the test function, which must all be plain identifiers of a supported type
+fn params(item: &ItemFn) -> Result<Vec<Param>> {
     if item.sig.inputs.is_empty() {
         return Err(Error::new_spanned(
             &item.sig,
@@ -63,7 +126,10 @@ fn param_names(item: &ItemFn) -> Result<Vec<Ident>> {
         .iter()
         .map(|arg| match arg {
             FnArg::Typed(pt) => match &*pt.pat {
-                Pat::Ident(pi) if pi.subpat.is_none() => Ok(pi.ident.unraw()),
+                Pat::Ident(pi) if pi.subpat.is_none() => Ok(Param {
+                    name: pi.ident.unraw(),
+                    kind: VectorKind::of(&pt.ty)?,
+                }),
                 other => Err(Error::new_spanned(
                     other,
                     "test_case_dir parameters must be plain identifiers",

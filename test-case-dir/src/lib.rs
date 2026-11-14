@@ -33,6 +33,8 @@
 //!
 //! Within each Test Case Directory there are one or more _Test Vector Files_. Their names must match the test function, so `input` and `expected` in our example.
 //!
+//! Each parameter must have type `&[u8]` or `&str` (with any lifetime), and receives its Test Vector File's contents via [`include_bytes!`] or [`include_str!`] respectively. The two may be mixed within one test function. A `&str` Test Vector File that is not valid UTF-8 is a compile error.
+//!
 //! It is a compile error if a Test Vector Directory contains anything other than Test Case Directories, or if a Test Case Directory is missing a Test Vector File for some parameter or contains any other entries.
 //!
 //! ## Macro Expansion
@@ -58,11 +60,11 @@
 //! fn deserialize_then_serialize(input: &[u8], expected: &[u8]) { ... }
 //! ```
 //!
-//! The actual expansion uses absolute paths in the `include_bytes!` calls, and refers to `test_case` through a hidden re-export in this crate.
+//! A `&str` parameter would use `include_str!` in place of `include_bytes!`. The actual expansion uses absolute paths in the `include_*!` calls, and refers to `test_case` through a hidden re-export in this crate.
 //!
 //! ## Rebuilds
 //!
-//! Each Test Vector File is included with [`include_bytes!`], so editing one triggers a rebuild. However, adding or removing Test Case Directories is not tracked by cargo, so a change to the test source file (or a `cargo clean`) is needed to pick up new cases.
+//! Each Test Vector File is included with [`include_bytes!`] or [`include_str!`], so editing one triggers a rebuild. However, adding or removing Test Case Directories is not tracked by cargo, so a change to the test source file (or a `cargo clean`) is needed to pick up new cases.
 
 pub use test_case_dir_macros::test_case_dir;
 
