@@ -11,3 +11,6 @@ chumsky = { workspace = true, features = ["lexical-numbers"] }
 clash-ast.workspace = true
 derive_more = { workspace = true, features = ["from"] }
 thiserror.workspace = true
+
+[dev-dependencies]
+test-case-dir.workspace = true

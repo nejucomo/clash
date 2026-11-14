@@ -2,9 +2,6 @@
 
 use derive_more::Display;
 
-#[cfg(test)]
-mod tests;
-
 pub mod errors;
 
 /// An expression

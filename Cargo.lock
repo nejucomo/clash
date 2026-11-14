@@ -197,7 +197,6 @@ name = "clash-ast"
 version = "0.1.0"
 dependencies = [
  "derive_more",
- "test-case-dir",
  "thiserror",
 ]
 
@@ -208,6 +207,7 @@ dependencies = [
  "chumsky",
  "clash-ast",
  "derive_more",
+ "test-case-dir",
  "thiserror",
 ]
 

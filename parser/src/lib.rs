@@ -2,6 +2,9 @@
 
 #![allow(missing_docs)] // expedient
 
+#[cfg(test)]
+mod tests;
+
 use chumsky::Parser;
 use clash_ast::Expr;
 use derive_more::From;
