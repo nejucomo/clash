@@ -18,5 +18,9 @@ missing_docs = "deny"
 unsafe_code = "deny"
 
 [workspace.dependencies]
-yaffa = "0.1.1"
+test-case-dir.path = "test-case-dir"
+
 clap = "4.6.7"
+derive_more = "2.1.1"
+thiserror = "2.0.21"
+yaffa = "0.1.1"
