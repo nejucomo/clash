@@ -69,7 +69,7 @@ impl Validator for StringLiteral {
                 }
 
                 Terminated => {
-                    return Err(UnexpectedSuffix(chars.as_str().to_string()));
+                    return Err(UnexpectedSuffix(format!("{c}{}", chars.as_str())));
                 }
             }
         }
