@@ -8,5 +8,5 @@ workspace = true
 
 [dependencies]
 aliri_braid.workspace = true
-derive_more = { workspace = true, features = ["display"] }
+derive_more = { workspace = true, features = ["display", "from"] }
 thiserror.workspace = true
