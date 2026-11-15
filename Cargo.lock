@@ -217,6 +217,7 @@ version = "0.1.0"
 dependencies = [
  "aliri_braid",
  "derive_more",
+ "test-case-dir",
  "thiserror",
 ]
 
