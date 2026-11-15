@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use chumsky::Parser as _;
 use clash_ast::Expr;
 
@@ -12,7 +14,7 @@ pub(crate) fn expr<'i>() -> impl ClashParser<'i, Expr> {
 impl<'i> HasParser<'i> for Expr {
     fn parser() -> impl ClashParser<'i, Self> {
         i64::parser_into()
-            .or(String::parser_into())
+            .or(Rc::<String>::parser_into())
             .then_ignore(ws())
     }
 }

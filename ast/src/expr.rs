@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use derive_more::{Display, From};
 
 /// An expression
@@ -6,5 +8,5 @@ pub enum Expr {
     /// An int literal
     Int(i64),
     /// A string literal
-    Str(String),
+    Str(Rc<String>),
 }

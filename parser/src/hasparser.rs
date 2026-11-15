@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use chumsky::Parser as _;
 use chumsky::prelude::{choice, just, none_of};
 use chumsky::{IterParser as _, text};
@@ -18,6 +20,12 @@ pub(crate) trait HasParser<'i>: Sized {
 impl<'i> HasParser<'i> for i64 {
     fn parser() -> impl ClashParser<'i, Self> {
         text::digits(10).collect::<String>().from_str().unwrapped()
+    }
+}
+
+impl<'i> HasParser<'i> for Rc<String> {
+    fn parser() -> impl ClashParser<'i, Self> {
+        String::parser().map_with(|sval, st| st.state().intern(sval))
     }
 }
 
