@@ -7,7 +7,7 @@ version.workspace = true
 workspace = true
 
 [dependencies]
-chumsky = { workspace = true, features = ["lexical-numbers"] }
+chumsky.workspace = true
 clash-ast.workspace = true
 derive_more = { workspace = true, features = ["from"] }
 thiserror.workspace = true
