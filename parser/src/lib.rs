@@ -6,8 +6,8 @@ mod cherror;
 mod clash_parser;
 mod error;
 mod expr;
+mod hasparser;
 mod srctext;
-mod strlit;
 
 #[cfg(test)]
 mod tests;
