@@ -36,10 +36,10 @@ impl Validator for Symbol {
                 if first {
                     first = false;
 
-                    if !SYMBOL_SYMBOLS.contains(c) || c.is_alphabetic() {
+                    if !(SYMBOL_SYMBOLS.contains(c) || c.is_alphabetic()) {
                         return Err(InvalidInitialChar(c));
                     }
-                } else if !SYMBOL_SYMBOLS.contains(c) || c.is_alphanumeric() {
+                } else if !(SYMBOL_SYMBOLS.contains(c) || c.is_alphanumeric()) {
                     return Err(InvalidChar(c));
                 }
             }
