@@ -216,6 +216,8 @@ name = "clash-ast"
 version = "0.1.0"
 dependencies = [
  "aliri_braid",
+ "chumsky",
+ "clash-chumka",
  "derive_more",
  "test-case-dir",
  "thiserror",
@@ -227,6 +229,8 @@ version = "0.1.0"
 dependencies = [
  "chumsky",
  "clash-interning",
+ "derive_more",
+ "indent",
 ]
 
 [[package]]
@@ -352,6 +356,12 @@ name = "heck"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
+
+[[package]]
+name = "indent"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d9f1a0777d972970f204fdf8ef319f1f4f8459131636d7e3c96c5d59570d0fa6"
 
 [[package]]
 name = "indenter"

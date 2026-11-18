@@ -1,20 +1,17 @@
-use std::rc::Rc;
-
 use chumsky::extra::{Full, SimpleState};
-use clash_interning::Interns;
 
 use crate::Error;
 
 /// An extension trait of [chumksy::Parser] streamlined for `clash` support
-pub trait Parser<'i, O, S>:
+pub trait Parser<'i, O, S = ()>:
     Sized + chumsky::Parser<'i, &'i str, O, Full<Error<'i>, SimpleState<S>, ()>>
 {
-    /// Intern the parsed value
-    fn interned(self) -> impl Parser<'i, Rc<O>, S>
+    /// Map the output with `&mut S`
+    fn map_with_chumka_state<U, F>(self, f: F) -> impl Parser<'i, U, S>
     where
-        S: Interns<O>,
+        F: Fn(O, &mut S) -> U,
     {
-        self.map_with(|o, xtra| xtra.state().get_interned(o))
+        self.map_with(move |o, xtra| f(o, xtra.state()))
     }
 }
 

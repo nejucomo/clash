@@ -8,6 +8,8 @@ workspace = true
 
 [dependencies]
 aliri_braid.workspace = true
+chumsky.workspace = true
+clash-chumka.workspace = true
 derive_more = { workspace = true, features = ["display", "from"] }
 thiserror.workspace = true
 
