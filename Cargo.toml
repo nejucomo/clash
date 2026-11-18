@@ -2,7 +2,8 @@
 resolver = "3"
 members = [
   "ast",
-  "clash", "parser",
+  "chumka",
+  "clash",
   "test-case-dir",
   "test-case-dir-macros",
 ]
@@ -20,7 +21,7 @@ unsafe_code = "deny"
 
 [workspace.dependencies]
 clash-ast.path = "ast"
-clash-parser.path = "parser"
+clash-chumka.path = "chumka"
 test-case-dir.path = "test-case-dir"
 test-case-dir-macros.path = "test-case-dir-macros"
 

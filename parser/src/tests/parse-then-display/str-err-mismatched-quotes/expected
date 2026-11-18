@@ -1,3 +1,0 @@
-err: parse errors: [
-    found end of input at 8..8 expected something else, ''\\'', or ''\''',
-]

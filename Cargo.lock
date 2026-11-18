@@ -222,14 +222,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "clash-parser"
+name = "clash-chumka"
 version = "0.1.0"
 dependencies = [
  "chumsky",
- "clash-ast",
- "derive_more",
- "test-case-dir",
- "thiserror",
 ]
 
 [[package]]

@@ -1,0 +1,10 @@
+[package]
+name = "clash-chumka"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+chumsky.workspace = true
+
+[lints]
+workspace = true

@@ -1,3 +1,0 @@
-err: parse errors: [
-    found ''q'' at 3..4 expected ''\\'', ''\''', ''"'', ''n'', ''t'', ''r'', or ''0'',
-]
