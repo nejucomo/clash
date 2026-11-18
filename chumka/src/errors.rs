@@ -22,3 +22,27 @@ impl<'i> Display for Errors<'i> {
         Ok(())
     }
 }
+
+impl<'i> IntoIterator for Errors<'i> {
+    type Item = Error<'i>;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
+    }
+}
+
+impl<'i> FromIterator<Error<'i>> for Errors<'i> {
+    fn from_iter<I: IntoIterator<Item = Error<'i>>>(iter: I) -> Self {
+        Self(Vec::from_iter(iter))
+    }
+}
+
+/// A hack to support downstream `aliri_braid` users
+///
+/// If an `aliri_braid` newtype uses parsing for its validation, the error type must implement this. `clash_ast` uses this pattern.
+impl<'i> From<std::convert::Infallible> for Errors<'i> {
+    fn from(_: std::convert::Infallible) -> Self {
+        unreachable!("Infallible is uninhabitable")
+    }
+}
