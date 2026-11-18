@@ -4,6 +4,7 @@ members = [
   "ast",
   "chumka",
   "clash",
+  "interning",
   "test-case-dir",
   "test-case-dir-macros",
 ]
@@ -22,6 +23,7 @@ unsafe_code = "deny"
 [workspace.dependencies]
 clash-ast.path = "ast"
 clash-chumka.path = "chumka"
+clash-interning.path = "interning"
 test-case-dir.path = "test-case-dir"
 test-case-dir-macros.path = "test-case-dir-macros"
 

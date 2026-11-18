@@ -1,0 +1,10 @@
+[package]
+name = "clash-interning"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+derive_more = { workspace = true, features = ["from"] }
+
+[lints]
+workspace = true
