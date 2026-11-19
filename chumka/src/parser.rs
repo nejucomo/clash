@@ -1,4 +1,5 @@
 use chumsky::extra::{Full, SimpleState};
+use chumsky::primitive::just;
 
 use crate::{Error, Errors};
 
@@ -28,6 +29,11 @@ pub trait Parser<'i, O, S>:
         F: Fn(O, &mut S) -> U,
     {
         self.map_with(move |o, xtra| f(o, xtra.state()))
+    }
+
+    /// Delimited by single characters
+    fn delimited_by_chars(self, open: char, close: char) -> impl Parser<'i, O, S> {
+        self.delimited_by(just(open), just(close))
     }
 }
 

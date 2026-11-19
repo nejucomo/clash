@@ -1,83 +1,50 @@
 use aliri_braid::{Validator, braid};
-use thiserror::Error;
+use chumsky::Parser as _;
+use chumsky::primitive::{just, none_of, one_of};
+use clash_chumka::{Errors, Parsable, ParsableStateless, Parser};
 
 pub const QUOTE_SINGLE: char = '\'';
 pub const QUOTE_DOUBLE: char = '"';
 pub const ESCAPE: char = '\\';
-pub const ESCAPEES: &str = r#"\'"ntr0"#;
+/// Note: ESCAPEES excludes either quote char
+pub const ESCAPEES: &str = r#"ntr0"#;
 
 /// A string literal
 #[braid(validator)]
 pub struct StringLiteral;
 
-#[derive(Debug, Error)]
-pub enum MalformedStringLiteral {
-    #[error("empty string literal")]
-    Empty,
-
-    #[error("invalid quote {0:?}, expected {QUOTE_SINGLE:?} or {QUOTE_DOUBLE:?}")]
-    InvalidQuote(char),
-
-    #[error("unexpected suffix: {0:?}")]
-    UnexpectedSuffix(String),
-
-    #[error("unexpected escapee: {0:?}, drop the {ESCAPE:?} prefix")]
-    UnexpectedEscapee(char),
-
-    #[error("missing terminal {0:?} quote")]
-    MissingTerminalQuote(char),
+impl<S> Parsable<S> for StringLiteral {
+    fn parser<'i>() -> impl Parser<'i, Self, S> {
+        #[allow(unsafe_code)]
+        strlit(QUOTE_SINGLE)
+            .or(strlit(QUOTE_DOUBLE))
+            .to_slice()
+            .map(|s| unsafe { Self::new_unchecked(s.to_string()) })
+    }
 }
 
-aliri_braid::from_infallible!(MalformedStringLiteral);
+fn strlit<'i, S>(quote: char) -> impl Parser<'i, (), S> {
+    body(quote).repeated().delimited_by_chars(quote, quote)
+}
+
+fn body<'i, S>(quote: char) -> impl Parser<'i, (), S> {
+    escape_sequence(quote).or(unescaped(quote))
+}
+
+fn escape_sequence<'i, S>(quote: char) -> impl Parser<'i, (), S> {
+    just(ESCAPE)
+        .ignore_then(one_of(ESCAPEES).or(just(quote)))
+        .ignored()
+}
+
+fn unescaped<'i, S>(quote: char) -> impl Parser<'i, (), S> {
+    none_of([quote, ESCAPE]).ignored() // FIXME: require it to be printable, with ` ` as the only acceptable whitespace, and not `quote`
+}
 
 impl Validator for StringLiteral {
-    type Error = MalformedStringLiteral;
+    type Error = Errors<'static>;
 
     fn validate(raw: &str) -> Result<(), Self::Error> {
-        use MalformedStringLiteral::*;
-        use State::*;
-
-        enum State {
-            Init,
-            Base { quote: char },
-            Escaped { quote: char },
-            Terminated,
-        }
-
-        let mut chars = raw.chars();
-        let mut st = Init;
-
-        for c in chars.by_ref() {
-            match st {
-                Init if c == QUOTE_SINGLE || c == QUOTE_DOUBLE => {
-                    st = Base { quote: c };
-                }
-
-                Init => {
-                    return Err(InvalidQuote(c));
-                }
-
-                Base { quote } if c == quote => st = Terminated,
-                Base { quote } if c == ESCAPE => st = Escaped { quote },
-                Base { .. } => {}
-
-                Escaped { .. } if !ESCAPEES.contains(c) => {
-                    return Err(UnexpectedEscapee(c));
-                }
-                Escaped { quote } => {
-                    st = Base { quote };
-                }
-
-                Terminated => {
-                    return Err(UnexpectedSuffix(format!("{c}{}", chars.as_str())));
-                }
-            }
-        }
-
-        match st {
-            Init => Err(Empty),
-            Base { quote } | Escaped { quote } => Err(MissingTerminalQuote(quote)),
-            Terminated => Ok(()),
-        }
+        Self::validate_stateless_owned(raw)
     }
 }

@@ -10,14 +10,6 @@ pub const SYMBOL_SYMBOLS: &str = "-+_";
 #[braid(validator)]
 pub struct Symbol;
 
-impl Validator for Symbol {
-    type Error = Errors<'static>;
-
-    fn validate(raw: &str) -> Result<(), Self::Error> {
-        Self::validate_stateless_owned(raw)
-    }
-}
-
 impl<S> Parsable<S> for Symbol {
     fn parser<'i>() -> impl Parser<'i, Self, S> {
         fn initial<'i, S>() -> impl Parser<'i, char, S> {
@@ -33,6 +25,14 @@ impl<S> Parsable<S> for Symbol {
         initial()
             .then(subsequent().repeated())
             .to_slice()
-            .map(|s| unsafe { Symbol::new_unchecked(s.to_string()) })
+            .map(|s| unsafe { Self::new_unchecked(s.to_string()) })
+    }
+}
+
+impl Validator for Symbol {
+    type Error = Errors<'static>;
+
+    fn validate(raw: &str) -> Result<(), Self::Error> {
+        Self::validate_stateless_owned(raw)
     }
 }
