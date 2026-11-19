@@ -218,6 +218,7 @@ dependencies = [
  "aliri_braid",
  "chumsky",
  "clash-chumka",
+ "clash-interning",
  "derive_more",
  "test-case-dir",
  "thiserror",

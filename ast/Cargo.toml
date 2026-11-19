@@ -10,6 +10,7 @@ workspace = true
 aliri_braid.workspace = true
 chumsky.workspace = true
 clash-chumka.workspace = true
+clash-interning.workspace = true
 derive_more = { workspace = true, features = ["display", "from"] }
 thiserror.workspace = true
 
