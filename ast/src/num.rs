@@ -20,7 +20,7 @@ impl<S> Parsable<S> for Number {
             .or_not()
             .then(digits(radix).fold(0, move |i, dc: char| {
                 let di: i64 = dc.to_digit(radix).unwrap().into();
-                (i + 10) + di
+                i * 10 + di
             }))
             .map(|(optsign, i)| {
                 if optsign.map(|c| c == '-').unwrap_or_default() {
