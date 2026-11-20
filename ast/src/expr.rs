@@ -26,8 +26,13 @@ where
         use Expr::*;
 
         // A signed number such as `-42` is also a valid symbol, so numbers take precedence. A number immediately followed by symbol characters, such as `-4foo`, is instead a symbol.
-        let num = maps_parser(Num).then_ignore(crate::symbol::subsequent().not());
+        let not_symbol_suffix = || crate::symbol::subsequent().not();
+        let num = maps_parser(Num).then_ignore(not_symbol_suffix());
 
-        num.or(maps_parser(Sym)).or(maps_parser(Str))
+        // Input that looks like a number is never a symbol, even when the number is invalid (e.g. it overflows).
+        let num_lexeme = crate::num::lexeme().then_ignore(not_symbol_suffix());
+        let sym = num_lexeme.not().ignore_then(maps_parser(Sym));
+
+        num.or(sym).or(maps_parser(Str))
     }
 }

@@ -1,7 +1,7 @@
+use chumsky::Parser as _;
 use chumsky::primitive::one_of;
 use chumsky::text::digits;
-use chumsky::{IterParser as _, Parser as _};
-use clash_chumka::{Parsable, Parser};
+use clash_chumka::{Error, Parsable, Parser};
 use derive_more::Display;
 
 /// A numeric expression
@@ -14,21 +14,18 @@ pub struct Number(i64);
 
 impl<S> Parsable<S> for Number {
     fn parser<'i>() -> impl Parser<'i, Self, S> {
-        let radix = 10;
-
-        one_of(['-', '+'])
-            .or_not()
-            .then(digits(radix).fold(0, move |i, dc: char| {
-                let di: i64 = dc.to_digit(radix).unwrap().into();
-                i * 10 + di
-            }))
-            .map(|(optsign, i)| {
-                if optsign.map(|c| c == '-').unwrap_or_default() {
-                    -i
-                } else {
-                    i
-                }
-            })
-            .map(Number)
+        lexeme().to_slice().try_map(|s: &str, span| {
+            s.parse()
+                .map(Number)
+                .map_err(|e| Error::custom(span, format!("invalid number {s:?}: {e}")))
+        })
     }
+}
+
+/// Parse the textual form of a [Number] without interpreting its value
+pub(crate) fn lexeme<'i, S>() -> impl Parser<'i, (), S> {
+    one_of(['-', '+'])
+        .or_not()
+        .then(digits(10))
+        .ignored()
 }
