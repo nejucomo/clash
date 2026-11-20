@@ -2,7 +2,7 @@ use chumsky::extra::{Full, SimpleState};
 
 use crate::Error;
 
-/// An extension trait of [chumksy::IterParser] streamlined for `clash` support
+/// An extension trait of [chumsky::IterParser] streamlined for `clash` support
 pub trait IterParser<'i, O, S = ()>:
     Sized + chumsky::IterParser<'i, &'i str, O, Full<Error<'i>, SimpleState<S>, ()>>
 {

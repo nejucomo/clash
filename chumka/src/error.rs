@@ -14,7 +14,7 @@ use derive_more::Display;
 /// [Rich] implements [ChumskyError] and [LabelError] generically over any input with `char` tokens and [SimpleSpan] spans, so delegating calls must name the input type explicitly.
 type Input<'i> = &'i str;
 
-/// The internal / individual case error type for [chumka::Parser]
+/// The internal / individual case error type for [crate::Parser]
 ///
 /// This wraps [Rich] only to provide a structural [Debug] impl, since [Rich]'s [Debug] is identical to its [Display].
 #[derive(Display)]

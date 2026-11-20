@@ -3,7 +3,7 @@ use chumsky::primitive::just;
 
 use crate::{Error, Errors};
 
-/// An extension trait of [chumksy::Parser] streamlined for `clash` support
+/// An extension trait of [chumsky::Parser] streamlined for `clash` support
 pub trait Parser<'i, O, S>:
     Sized + chumsky::Parser<'i, &'i str, O, Full<Error<'i>, SimpleState<S>, ()>>
 {

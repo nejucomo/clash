@@ -6,14 +6,10 @@ use clash_chumka::{Errors, Parsable, ParsableStateless, Parser};
 /// These characters may appear in symbols in any position
 pub const SYMBOL_SYMBOLS: &str = "-+_";
 
-/// The sign characters, which may begin a [Number](crate::Number) as well as a [Symbol]
+/// The sign characters, which may begin a [Number](crate::literal::Number) as well as a [Symbol]
 pub const SIGNS: &str = "-+";
 
 /// A symbol
-///
-/// # Grammar
-///
-/// A symbol is a non-empty sequence of [SYMBOL_SYMBOLS], alphabetic, and decimal digit characters, where the first character after any leading [SIGNS] must not be a digit. This ensures no symbol is also a valid [Number](crate::Number), such as `-42`.
 #[braid(validator)]
 pub struct Symbol;
 
@@ -35,7 +31,7 @@ impl<S> Parsable<S> for Symbol {
     }
 }
 
-/// Parse a character which may follow any leading [SIGNS] of a [Symbol]
+/// Parse a character which may follow any leading `SIGNS` of a [Symbol]
 fn unsigned_initial<'i, S>() -> impl Parser<'i, char, S> {
     one_of(SYMBOL_SYMBOLS)
         .filter(|&c: &char| !SIGNS.contains(c))

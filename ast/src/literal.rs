@@ -15,7 +15,7 @@ use clash_chumka::{Parsable, Parser, maps_parser};
 use clash_interning::Interns;
 use derive_more::{Display, From};
 
-/// An expression
+/// A literal expression
 #[derive(Debug, Display, From)]
 pub enum Literal {
     /// A symbol
