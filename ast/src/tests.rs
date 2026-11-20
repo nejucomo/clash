@@ -1,11 +1,11 @@
 use std::rc::Rc;
 
 use aliri_braid::Validator;
-use clash_chumka::{Parsable, Parser as _};
+use clash_chumka::{Parsable, ParsableStateless as _, Parser as _};
 use clash_interning::{Interner, Interns};
 use test_case_dir::test_case_dir;
 
-use crate::{Expr, StringLiteral, Symbol};
+use crate::{Expr, Number, StringLiteral, Symbol};
 
 /// Validate `input` with `V` and compare the [Debug] rendering of the outcome to `expected`
 ///
@@ -39,6 +39,17 @@ fn expr_parse(input: &str, expected: &str) {
     );
     eprintln!("input: {input:?}\nactual: {actual}\nexpected: {expected}");
     assert_eq!(actual, expected);
+}
+
+/// Assert that `input` is not both a valid [Symbol] and a valid [Number]
+///
+/// `input` is used verbatim.
+#[test_case_dir("tests/symbol-number-non-overlap")]
+fn symbol_number_non_overlap(input: &str) {
+    let sym = Symbol::parser_stateless().parse_chumka(input);
+    let num = Number::parser_stateless().parse_chumka(input);
+    eprintln!("input: {input:?}\nsymbol: {sym:?}\nnumber: {num:?}");
+    assert!(!(sym.is_ok() && num.is_ok()));
 }
 
 /// The parser state for [expr_parse]
