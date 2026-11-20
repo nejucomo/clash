@@ -28,12 +28,13 @@ fn strlit<'i, S>(quote: char) -> impl Parser<'i, (), S> {
 }
 
 fn body<'i, S>(quote: char) -> impl Parser<'i, (), S> {
-    escape_sequence(quote).or(unescaped(quote))
+    escape_sequence().or(unescaped(quote))
 }
 
-fn escape_sequence<'i, S>(quote: char) -> impl Parser<'i, (), S> {
+/// Either quote may be escaped regardless of which `quote` delimits the literal
+fn escape_sequence<'i, S>() -> impl Parser<'i, (), S> {
     just(ESCAPE)
-        .ignore_then(one_of(ESCAPEES).or(just(quote)))
+        .ignore_then(one_of(ESCAPEES).or(one_of([QUOTE_SINGLE, QUOTE_DOUBLE])))
         .ignored()
 }
 
