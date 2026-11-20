@@ -25,11 +25,11 @@ where
     fn parser<'i>() -> impl Parser<'i, Self, S> {
         use Expr::*;
 
-        // A signed number such as `-42` is also a valid symbol, so numbers take precedence. A number immediately followed by symbol characters, such as `-4foo`, is instead a symbol.
+        // A number must not run directly into symbol characters, such as `42foo`.
         let not_symbol_suffix = || crate::symbol::subsequent().not();
         let num = maps_parser(Num).then_ignore(not_symbol_suffix());
 
-        // Input that looks like a number is never a symbol, even when the number is invalid (e.g. it overflows).
+        // The `Sym` and `Num` grammars are disjoint, so this guard does not change which inputs parse. Rather, it ensures that number-like input reports the `Num` error (e.g. overflow) instead of `Sym` failing on its first digit.
         let num_lexeme = crate::num::lexeme().then_ignore(not_symbol_suffix());
         let sym = num_lexeme.not().ignore_then(maps_parser(Sym));
 
