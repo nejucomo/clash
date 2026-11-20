@@ -7,7 +7,7 @@ pub const QUOTE_SINGLE: char = '\'';
 pub const QUOTE_DOUBLE: char = '"';
 pub const ESCAPE: char = '\\';
 /// Note: ESCAPEES excludes either quote char
-pub const ESCAPEES: &str = r#"ntr0"#;
+pub const ESCAPEES: &str = r#"\ntr0"#;
 
 /// A string literal
 #[braid(validator)]
