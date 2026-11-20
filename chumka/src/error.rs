@@ -1,3 +1,6 @@
+mod pattern;
+mod reason;
+
 use std::fmt::Debug;
 
 use chumsky::error::{Error as ChumskyError, Rich, RichPattern};
@@ -33,7 +36,7 @@ impl<'i> Debug for Error<'i> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("Error")
             .field("span", self.0.span())
-            .field("reason", self.0.reason())
+            .field("reason", &reason::RichReason(self.0.reason()))
             .field("found", &self.0.found())
             .finish()
     }
