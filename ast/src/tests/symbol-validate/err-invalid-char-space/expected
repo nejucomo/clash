@@ -1,1 +1,1 @@
-Err(InvalidChar(' '))
+Err(Errors([Error { span: 3..4, reason: ExpectedFound { expected: [''-'', ''+'', ''_'', something else, end of input], found: Some(' ') }, found: Some(' ') }]))

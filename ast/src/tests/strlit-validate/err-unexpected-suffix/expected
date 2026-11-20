@@ -1,1 +1,1 @@
-Err(UnexpectedSuffix("bc"))
+Err(Errors([Error { span: 3..4, reason: ExpectedFound { expected: [end of input], found: Some('b') }, found: Some('b') }]))

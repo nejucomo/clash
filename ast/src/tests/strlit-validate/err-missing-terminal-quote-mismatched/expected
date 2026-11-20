@@ -1,1 +1,1 @@
-Err(MissingTerminalQuote('\''))
+Err(Errors([Error { span: 5..5, reason: ExpectedFound { expected: [''\\'', something else, ''\'''], found: None }, found: None }]))

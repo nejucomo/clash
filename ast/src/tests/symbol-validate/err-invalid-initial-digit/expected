@@ -1,1 +1,1 @@
-Err(InvalidInitialChar('4'))
+Err(Errors([Error { span: 0..1, reason: ExpectedFound { expected: [''-'', ''+'', ''_'', something else], found: Some('4') }, found: Some('4') }]))
