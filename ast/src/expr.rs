@@ -25,6 +25,9 @@ where
     fn parser<'i>() -> impl Parser<'i, Self, S> {
         use Expr::*;
 
-        maps_parser(Sym).or(maps_parser(Num)).or(maps_parser(Str))
+        // A signed number such as `-42` is also a valid symbol, so numbers take precedence. A number immediately followed by symbol characters, such as `-4foo`, is instead a symbol.
+        let num = maps_parser(Num).then_ignore(crate::symbol::subsequent().not());
+
+        num.or(maps_parser(Sym)).or(maps_parser(Str))
     }
 }

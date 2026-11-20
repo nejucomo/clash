@@ -12,21 +12,23 @@ pub struct Symbol;
 
 impl<S> Parsable<S> for Symbol {
     fn parser<'i>() -> impl Parser<'i, Self, S> {
-        fn initial<'i, S>() -> impl Parser<'i, char, S> {
-            one_of(SYMBOL_SYMBOLS).or(any().filter(|&c: &char| c.is_alphabetic()))
-        }
-
-        #[allow(clippy::is_digit_ascii_radix)]
-        fn subsequent<'i, S>() -> impl Parser<'i, char, S> {
-            initial().or(any().filter(|&c: &char| c.is_digit(10)))
-        }
-
         #[allow(unsafe_code)]
         initial()
             .then(subsequent().repeated())
             .to_slice()
             .map(|s| unsafe { Self::new_unchecked(s.to_string()) })
     }
+}
+
+/// Parse a character which may begin a [Symbol]
+fn initial<'i, S>() -> impl Parser<'i, char, S> {
+    one_of(SYMBOL_SYMBOLS).or(any().filter(|&c: &char| c.is_alphabetic()))
+}
+
+/// Parse a character which may appear in a [Symbol] after the initial character
+#[allow(clippy::is_digit_ascii_radix)]
+pub(crate) fn subsequent<'i, S>() -> impl Parser<'i, char, S> {
+    initial().or(any().filter(|&c: &char| c.is_digit(10)))
 }
 
 impl Validator for Symbol {
