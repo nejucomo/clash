@@ -1,1 +1,1 @@
-Ok(Str("\"abc\""))
+Ok(Text("\"abc\""))

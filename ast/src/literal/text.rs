@@ -11,9 +11,9 @@ pub const ESCAPEES: &str = r#"\ntr0"#;
 
 /// A string literal
 #[braid(validator)]
-pub struct StringLiteral;
+pub struct Text;
 
-impl<S> Parsable<S> for StringLiteral {
+impl<S> Parsable<S> for Text {
     fn parser<'i>() -> impl Parser<'i, Self, S> {
         #[allow(unsafe_code)]
         strlit(QUOTE_SINGLE)
@@ -42,7 +42,7 @@ fn unescaped<'i, S>(quote: char) -> impl Parser<'i, (), S> {
     none_of([quote, ESCAPE]).ignored() // FIXME: require it to be printable, with ` ` as the only acceptable whitespace, and not `quote`
 }
 
-impl Validator for StringLiteral {
+impl Validator for Text {
     type Error = Errors<'static>;
 
     fn validate(raw: &str) -> Result<(), Self::Error> {
