@@ -1,1 +1,1 @@
-Err(Errors([found end of input at 0..0 expected ''-'', ''+'', digit, ''_'', any, ''\''', or ''"'']))
+Err(Errors([Error { span: 0..0, reason: ExpectedFound { expected: [Token('-'), Token('+'), Label("digit"), Token('_'), Any, Token('\''), Token('"')], found: None }, found: None }]))

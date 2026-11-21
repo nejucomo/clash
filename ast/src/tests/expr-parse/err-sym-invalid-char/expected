@@ -1,1 +1,1 @@
-Err(Errors([found ''.'' at 3..4 expected ''-'', ''+'', ''_'', something else, or end of input]))
+Err(Errors([Error { span: 3..4, reason: ExpectedFound { expected: [Token('-'), Token('+'), Token('_'), SomethingElse, EndOfInput], found: Some('.') }, found: Some('.') }]))

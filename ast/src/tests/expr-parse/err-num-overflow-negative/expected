@@ -1,1 +1,1 @@
-Err(Errors([invalid number "-9223372036854775809": number too small to fit in target type at 0..20]))
+Err(Errors([Error { span: 0..20, reason: Custom("invalid number \"-9223372036854775809\": number too small to fit in target type"), found: None }]))

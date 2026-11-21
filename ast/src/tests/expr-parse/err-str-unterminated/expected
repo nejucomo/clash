@@ -1,1 +1,1 @@
-Err(Errors([found end of input at 4..4 expected ''\\'', something else, or ''\''']))
+Err(Errors([Error { span: 4..4, reason: ExpectedFound { expected: [Token('\\'), SomethingElse, Token('\'')], found: None }, found: None }]))

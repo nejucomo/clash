@@ -1,1 +1,1 @@
-Err(Errors([found ''-'' at 1..2 expected digit, or something else]))
+Err(Errors([Error { span: 1..2, reason: ExpectedFound { expected: [Label("digit"), SomethingElse], found: Some('-') }, found: Some('-') }]))

@@ -1,1 +1,1 @@
-Err(Errors([found ''b'' at 3..4 expected end of input]))
+Err(Errors([Error { span: 3..4, reason: ExpectedFound { expected: [EndOfInput], found: Some('b') }, found: Some('b') }]))

@@ -1,1 +1,1 @@
-Err(Errors([found ''\n'' at 2..3 expected digit, or end of input]))
+Err(Errors([Error { span: 2..3, reason: ExpectedFound { expected: [Label("digit"), EndOfInput], found: Some('\n') }, found: Some('\n') }]))
