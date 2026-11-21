@@ -1,1 +1,1 @@
-Err(Errors([Error { span: 0..0, reason: ExpectedFound { expected: [''\''', ''"''], found: None }, found: None }]))
+Err(Errors([Error { span: 0..0, reason: ExpectedFound { expected: [Token('\''), Token('"')], found: None }, found: None }]))
